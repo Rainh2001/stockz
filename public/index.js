@@ -1,4 +1,5 @@
 function queryStocks(){
+    document.querySelector("button").disabled = true;
     var xhttp;
     if (window.XMLHttpRequest) {
         xhttp = new XMLHttpRequest();
@@ -17,6 +18,7 @@ function queryStocks(){
 }
 
 function displayStocks(results){
+    document.querySelector("button").disabled = false;
     removeChildren(document.querySelector("#companies"));
     results.forEach(company => {
         let container = document.createElement("div");
