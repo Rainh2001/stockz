@@ -48,6 +48,16 @@ app.get("/getQueryResults", async function(request, response){
         });
     }
     response.send(JSON.stringify(profile));
+    console.log(`Successful Transfer (${profile.length}):`);
+    let str = "{ ";
+    for(let i = 0; i < profile.length; i++){
+        str += profile[i].symbol;
+        if(i !== profile.length - 1){
+            str += ", ";
+        }
+    }
+    str += " }";
+    console.log(str);
 });
 
 function getQueryResults(query){
