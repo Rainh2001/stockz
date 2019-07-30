@@ -1,5 +1,6 @@
 function queryStocks(){
     document.querySelector("button").disabled = true;
+    let originalQuery = document.querySelector("input").value;
     var xhttp;
     if (window.XMLHttpRequest) {
         xhttp = new XMLHttpRequest();
@@ -9,7 +10,11 @@ function queryStocks(){
     }
     xhttp.onreadystatechange = function(){
         if(this.readyState === 4 && this.status === 200){
-            displayStocks(JSON.parse(this.response));
+            if(this.response === "error"){
+                displayError(originalQuery);
+            } else {
+                displayStocks(JSON.parse(this.response));
+            }
         }
     }
     let query = document.getElementById("input").value;
@@ -66,4 +71,13 @@ function removeChildren(element){
     while(element.firstChild){
         element.removeChild(element.firstChild);
     }
+}
+
+function displayError(query){
+    removeChildren(document.querySelector("#companies"));
+    let errorMessage = document.createElement("div");
+    errorMessage.classList.add("error");
+    errorMessage.textContent = `Couldn't retrieve any stocks referencing: ${query}`;
+    document.querySelector("#companies").appendChild(errorMessage);
+    document.querySelector("button").disabled = false;
 }

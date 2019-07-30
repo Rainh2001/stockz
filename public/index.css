@@ -2,6 +2,10 @@
     margin-top: 0.5em;
 }
 
+.error {
+    color: #ff0000;
+}
+
 .red {
     background-color: #ff8c8c;
 }

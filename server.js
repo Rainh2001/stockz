@@ -19,9 +19,10 @@ app.listen(port, function(){
 app.get("/getQueryResults", async function(request, response){
     let query = request.url.replace("/getQueryResults?query=", "")
     var queryResult = await getQueryResults(query);
-    if(typeof queryResult === Error){
+    if(queryResult === "error" || typeof queryResult == Error){
         response.send("error");
         console.log("Error receiving query results...");
+        return null;
     }
     queryResult = queryResult.ResultSet.Result;
     query = "";
@@ -31,11 +32,11 @@ app.get("/getQueryResults", async function(request, response){
             query += ",";
         }
     }
-    var quoteResult = await getQuotes(query);
-    if(typeof queryResult === Error){
+    if(query === ""){
         response.send("error");
-        console.log("Error receiving quote statistics...");
+        return null;
     }
+    var quoteResult = await getQuotes(query);
     quoteResult = quoteResult.quoteResponse.result;
     let profile = [];
     for(let i = 0; i < quoteResult.length; i++){
@@ -74,7 +75,7 @@ function getQueryResults(query){
         });
         request.end(function(response){
             if(response.error){
-                reject(new Error(response.error));
+                reject(new Error("Unable to query for companies..."));
             } else {
                 resolve(response.body);
             }
@@ -96,7 +97,7 @@ function getQuotes(query){
         });
         request.end(function(response){
             if(response.error){
-                reject(new Error(response.error));
+                reject(new Error("Unable to retrieve quotes..."));
             } else {
                 resolve(response.body);
             }
