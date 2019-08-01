@@ -1,6 +1,10 @@
 function queryStocks(){
     document.querySelector("button").disabled = true;
     let originalQuery = document.querySelector("input").value;
+    let counter = 0;
+    let counterInterval = setInterval(function(){
+        counter += 0.1;
+    }, 100);
     var xhttp;
     if (window.XMLHttpRequest) {
         xhttp = new XMLHttpRequest();
@@ -10,6 +14,8 @@ function queryStocks(){
     }
     xhttp.onreadystatechange = function(){
         if(this.readyState === 4 && this.status === 200){
+            clearInterval(counterInterval);
+            console.log(`Elapsed time: ${counter.toFixed(1)} seconds`);
             document.querySelector("button").disabled = false;
             if(this.response === "error"){
                 displayError(originalQuery);
